@@ -27,7 +27,7 @@ class Blockchain {
   };
 
   /**
-   * Get the latest block in the chain.
+   * Get the latest block in the chain
    * @return {Block} latestBlock
    */
   getLatestBlock = () => {
@@ -35,7 +35,7 @@ class Blockchain {
   };
 
   /**
-   * Add a new block to the chain.
+   * Add a new block to the chain
    * @param {Block} newBlock
    */
   addBlock = (newBlock: Block) => {
@@ -56,6 +56,28 @@ class Blockchain {
     } else {
       return null;
     }
+  };
+
+  /**
+   * Validate the chain.
+   * @return {boolean} validationResult
+   */
+  validate = () => {
+    for (let blockIdx = 1; blockIdx <= this.chain.length - 1; blockIdx++) {
+      const currentBlock = this.chain[blockIdx];
+      const previousBlock = this.chain[blockIdx - 1];
+
+      const currentBlockHashIsValid: boolean =
+          currentBlock.hash === currentBlock.calculateHash();
+      const previousBlockHashMatches: boolean =
+          currentBlock.previousHash === previousBlock.hash;
+
+      if (!currentBlockHashIsValid || !previousBlockHashMatches) {
+        return false;
+      }
+    }
+
+    return true;
   };
 }
 
