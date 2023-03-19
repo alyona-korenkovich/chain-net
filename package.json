@@ -42,6 +42,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "crypto-js": "^4.1.1"
+    "crypto-js": "^4.1.1",
+    "crypto-random-string": "^5.0.0"
   }
 }
