@@ -19,11 +19,12 @@ class Blockchain {
    * @return {Block} block
    */
   createGenesisBlock = () => {
-    return new Block({
+    const genesisBlock = new Block({
       index: 0,
       data: randomString(),
-      previousHash: '0',
     });
+    genesisBlock.previousHash = '0';
+    return genesisBlock;
   };
 
   /**

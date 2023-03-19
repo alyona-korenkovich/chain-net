@@ -11,16 +11,16 @@ class Block {
 
   /**
    * Block constructor
-   * @param {number} index - порядковый номер блока
-   * @param {string} data - данные
-   * @param {string} previousHash - хэш предыдущего блока
+   * @param {number} index
+   * @param {string} data
+   * @param {string} previousHash
    */
-  constructor({index, data, previousHash = ''}: TBlock) {
+  constructor({index, data}: TBlock) {
     this.validateIndex(index);
 
     this.index = index;
     this.data = data;
-    this.previousHash = previousHash;
+    this.previousHash = '';
     this.hash = this.calculateHash();
   }
 
