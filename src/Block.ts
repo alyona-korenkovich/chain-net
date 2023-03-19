@@ -1,5 +1,5 @@
 import {TBlock} from './types';
-import sha256 from 'crypto-js/sha256';
+import * as sha256 from 'crypto-js/sha256';
 import {indexErrorText} from './const';
 
 /** Class representing a block. */
@@ -38,9 +38,7 @@ class Block {
    * @return {string} hash
    */
   calculateHash = () => {
-    return sha256(this.index +
-        this.previousHash +
-        JSON.stringify(this.data)).toString();
+    return sha256(this.index + this.previousHash + this.data).toString();
   };
 }
 
