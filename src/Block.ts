@@ -1,5 +1,6 @@
 import {TBlock} from './types';
 import sha256 from 'crypto-js/sha256';
+import {indexErrorText} from './const';
 
 /** Class representing a block. */
 class Block {
@@ -15,11 +16,22 @@ class Block {
    * @param {string} previousHash - хэш предыдущего блока
    */
   constructor({index, data, previousHash = ''}: TBlock) {
+    this.validateIndex(index);
+
     this.index = index;
     this.data = data;
     this.previousHash = previousHash;
     this.hash = this.calculateHash();
   }
+
+  /**
+   * Validate a given index
+   * @param {number} index - given index
+   * @throws Will throw an error if the index is negative
+   */
+  validateIndex = (index: number) => {
+    if (index < 0) throw new Error(indexErrorText);
+  };
 
   /**
    * Calculates hash of a block using sha256
