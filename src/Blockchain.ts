@@ -6,12 +6,15 @@ import {randomString} from './helpers';
  */
 class Blockchain {
   chain: Array<Block>;
+  difficulty: number;
 
   /**
    * Blockchain constructor
+   * @param {number} difficulty - how many 0s has to be in the end of a hash
    */
-  constructor() {
+  constructor(difficulty: number) {
     this.chain = [this.createGenesisBlock()];
+    this.difficulty = difficulty;
   }
 
   /**
