@@ -3,11 +3,11 @@ import Block from '../src/Block';
 import {randomString} from '../src/helpers';
 
 const initiateBlockchain = () => {
-  return new Blockchain();
+  return new Blockchain(1);
 };
 
 const createRandomTestBlockchain = () => {
-  const testBlockchain = new Blockchain();
+  const testBlockchain = initiateBlockchain();
 
   for (let block = 1; block <= 3; block++) {
     const newBlock = new Block({
@@ -22,7 +22,7 @@ const createRandomTestBlockchain = () => {
 };
 
 const createDefinedTestBlockchain = () => {
-  const testBlockchain = new Blockchain();
+  const testBlockchain = initiateBlockchain();
 
   for (let block = 1; block <= 3; block++) {
     const newBlock = new Block({
