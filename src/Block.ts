@@ -14,15 +14,16 @@ class Block {
    * Block constructor
    * @param {number} index
    * @param {string} data
+   * @param {string} previousHash
    */
-  constructor({index, data}: TBlock) {
+  constructor({index, data, previousHash}: TBlock) {
     this.validateIndex(index);
 
     this.index = index;
     this.data = data;
-    this.previousHash = '';
-    this.hash = this.calculateHash();
+    this.previousHash = previousHash;
     this.nonce = 0;
+    this.hash = this.calculateHash();
   }
 
   /**
@@ -50,11 +51,12 @@ class Block {
   /**
    * Mine a block - increase nonce until the hash ends with `difficulty` zeros
    * @param {number} difficulty - number of zeros in the end
+   * @return {true} when mining is done
    */
   mineBlock = (difficulty: number) => {
     const hashLength = this.hash.length;
     const getLastSymbols = () => {
-      return this.hash.substring(hashLength - difficulty + 1, hashLength - 1);
+      return this.hash.substring(hashLength - difficulty, hashLength);
     };
 
     let hashLastFourSymbols = getLastSymbols();
@@ -64,6 +66,8 @@ class Block {
       this.hash = this.calculateHash();
       hashLastFourSymbols = getLastSymbols();
     }
+
+    return true;
   };
 }
 

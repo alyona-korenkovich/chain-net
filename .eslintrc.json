@@ -15,5 +15,13 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "max-len": [
+            "error",
+            {
+                "code": 80,
+                "ignoreComments": true,
+                "ignoreStrings": true
+            }
+        ]
     }
 }

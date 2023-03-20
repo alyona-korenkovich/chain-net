@@ -2,10 +2,11 @@ import Block from '../src/Block';
 import {indexErrorText} from '../src/const';
 import {TBlock} from '../src/types';
 
-const createBlock = ({index, data}: TBlock) => {
+const createBlock = ({index, data, previousHash}: TBlock) => {
   return new Block({
     index,
     data,
+    previousHash,
   });
 };
 
@@ -15,6 +16,7 @@ describe('Class Block', () => {
       expect(() => createBlock({
         index: -1,
         data: 'eyegfuwu5478yge32u3e5w',
+        previousHash: 'f76291f488416f3861357595304ac2151cfe678c43d6',
       })).toThrow(indexErrorText);
     });
 
@@ -23,16 +25,16 @@ describe('Class Block', () => {
       const testBlock = createBlock({
         index: 109,
         data: 'EcSiC183e5V4MVfUdPs42n6IU',
+        previousHash: 'fee41048b945c2df70956a61fff932f3e5fa2da92b783b31a96da93',
       });
 
       // Calculated manually using a third-party service
-      // eslint-disable-next-line max-len
-      const exp = 'ddb8917045fec1d7b9013d893c7fb0521229efa47b26c04cc56792158a9bb2d3';
+      const exp = '6bd4a389b17b7a0ccedac6fb3e0be90b8aea2940d4ad2ed4a78685da3a78d54b';
 
       expect(testBlock.index).toBe(109);
       expect(testBlock.data).toBe('EcSiC183e5V4MVfUdPs42n6IU');
       expect(testBlock.hash).toBe(exp);
-      expect(testBlock.previousHash).toBe('');
+      expect(testBlock.previousHash).toBe('fee41048b945c2df70956a61fff932f3e5fa2da92b783b31a96da93');
     });
   });
 
@@ -42,6 +44,7 @@ describe('Class Block', () => {
           const testBlock = createBlock({
             index: 109,
             data: 'testBlock',
+            previousHash: 'fee41048b56a61fff932f3e5fa2da92b783b31a96da93',
           });
           const prevTestBlockHash = testBlock.hash;
 
@@ -55,6 +58,7 @@ describe('Class Block', () => {
       const testBlock = createBlock({
         index: 109,
         data: 'testBlock',
+        previousHash: 'fee41048b945c2df70956a61fff932f3e5fa2da92b783b31a96da93',
       });
       const prevNonce = testBlock.nonce;
       const prevHash = testBlock.hash;
@@ -73,6 +77,7 @@ describe('Class Block', () => {
           const testBlock = createBlock({
             index: 109,
             data: 'testBlock',
+            previousHash: 'fee4104956a61fff932f3e5fa2da92b783b31a96da93',
           });
           const regex = /[0]$/;
 

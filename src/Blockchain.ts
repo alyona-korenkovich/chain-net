@@ -22,12 +22,11 @@ class Blockchain {
    * @return {Block} block
    */
   createGenesisBlock = () => {
-    const genesisBlock = new Block({
+    return new Block({
       index: 0,
       data: randomString(),
+      previousHash: '0',
     });
-    genesisBlock.previousHash = '0';
-    return genesisBlock;
   };
 
   /**
@@ -41,12 +40,20 @@ class Blockchain {
   /**
    * Add a new block to the chain
    * @param {Block} newBlock
+   * @return {true} if added a block
    */
   addBlock = (newBlock: Block) => {
+    let isAdded = false;
     const latestBlock = this.getLatestBlock();
-    newBlock.previousHash = latestBlock.hash;
-    newBlock.hash = newBlock.calculateHash();
-    this.chain.push(newBlock);
+    const indexIsValid = newBlock.index === latestBlock.index + 1;
+    const hashesAreValid = newBlock.previousHash === latestBlock.hash;
+
+    if (indexIsValid && hashesAreValid) {
+      this.chain.push(newBlock);
+      isAdded = true;
+    }
+
+    return isAdded;
   };
 
   /**
