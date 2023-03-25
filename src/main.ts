@@ -3,6 +3,7 @@ import {TAddress, TMessage, TSocket} from './types';
 import {message} from './helpers';
 
 import WebSocket, {WebSocketServer as WSWebSocketServer} from 'ws';
+import Blockchain from './Blockchain';
 
 const ADDRESS = process.env.ADDRESS || 'ws://localhost:3000';
 const PEERS = process.env.PEERS ? process.env.PEERS.split(',') : [];
@@ -15,7 +16,11 @@ const server = new WSWebSocketServer({
   port: PORT,
 });
 
-// console.log('Listening on PORT', PORT);
+// Work-around to support majority
+const check = [];
+const checked = [];
+const checking = false;
+const localChain = new Blockchain();
 
 server.on('connection', async (socket: WebSocket) => {
   socket.on('message', (message: string) => {
@@ -28,6 +33,12 @@ server.on('connection', async (socket: WebSocket) => {
         nodes.forEach((node) => {
           connect(node);
         });
+
+      case 'REQUEST_CHAIN': ;
+      case 'SEND_CHAIN': ;
+      case 'UPDATE_CHAIN': ;
+      case 'REQUEST_CHECK': ;
+      case 'SEND_CHECK':
     }
   });
 });
