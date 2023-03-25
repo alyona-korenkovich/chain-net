@@ -15,7 +15,7 @@ const server = new WSWebSocketServer({
   port: PORT,
 });
 
-console.log('Listening on PORT', PORT);
+// console.log('Listening on PORT', PORT);
 
 server.on('connection', async (socket: WebSocket) => {
   socket.on('message', (message: string) => {
@@ -97,15 +97,15 @@ const checkIfConnected = (address: TAddress) => {
 };
 
 // Error handling
-process.on('ERROR', (err) => console.log(err));
+process.on('ERROR', (err) => console.log('ERROR', err));
 
 // Debug
 setInterval(() => {
-  console.log(`OPENED SOCKETS: ${openedSockets},
+  console.log(`CONNECTED SOCKETS' ADDRESSES: ${JSON.stringify(connectedPeers)},
       ADDRESS: ${ADDRESS},
       PEERS: ${PEERS},
       PORT: ${PORT}
   `);
-}, 3000);
+}, 1000);
 
 PEERS.forEach((peer) => connect(peer));
