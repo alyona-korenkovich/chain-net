@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  node3000:
+    build:
+      dockerfile: Dockerfile
+    container_name: blockchain_3000
+    ports:
+      - "3000:3000"
+    environment:
+      ADDRESS: ws://localhost:3000
+      PEERS:
+      PORT: 3000
+    network_mode: host
+  node3001:
+    build:
+      dockerfile: Dockerfile
+    container_name: blockchain_3001
+    ports:
+      - "3001:3001"
+    environment:
+      ADDRESS: ws://localhost:3001
+      PEERS: ws://localhost:3000
+      PORT: 3001
+    depends_on:
+      - node3000
+    network_mode: host
+  node3002:
+    build:
+      dockerfile: Dockerfile
+    container_name: blockchain_3002
+    ports:
+      - "3002:3002"
+    environment:
+      ADDRESS: ws://localhost:3002
+      PEERS: ws://localhost:3000,ws://localhost:3001
+      PORT: 3002
+    depends_on:
+      - node3000
+      - node3001
+    network_mode: host
