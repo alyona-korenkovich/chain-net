@@ -22,6 +22,7 @@ const getEnvVars = ({
     ADDRESS: 'ws://localhost:3000',
     PEERS: '',
     PORT: '3000',
+    PATH: process.env.PATH,
   };
 
   if (address) {
