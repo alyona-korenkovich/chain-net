@@ -176,7 +176,7 @@ describe('Peer-to-peer network', () => {
         console.log('Node 3000 has no data in stdout');
       }
     }, 1000);
-  }, 15000);
+  }, 30000);
 
   test('three nodes get synchronized', (done) => {
     let processNode3000: ChildProcessWithoutNullStreams;

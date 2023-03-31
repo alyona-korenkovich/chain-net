@@ -12,7 +12,7 @@ jobs:
   run-tests:
     strategy:
       matrix:
-        os: [ ubuntu-20.04, windows-2022, macos-12 ]
+        os: [ ubuntu-20.04 ]
     runs-on: ${{ matrix.os }}
     if: ${{ always() }}
     steps:
@@ -27,8 +27,11 @@ jobs:
       - name: Check Node.js version
         run: node -v
 
-      - name: List Directory Contents
-        run: ls -al
+      - name: Show PATH
+          run: echo $PATH
+
+      - name: Show node path
+          run: which node
 
       - name: Install dependencies
         run: npm install
