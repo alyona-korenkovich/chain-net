@@ -12,16 +12,23 @@ jobs:
   run-tests:
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-20.04, windows-2022, macos-12 ]
     runs-on: ${{ matrix.os }}
+    if: ${{ always() }}
     steps:
       - name: Checkout code to runner
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up JS environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '16'
+
+      - name: Check Node.js version
+        run: node -v
+
+      - name: List Directory Contents
+        run: ls -al
 
       - name: Install dependencies
         run: npm install
