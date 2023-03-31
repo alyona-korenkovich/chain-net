@@ -15,10 +15,11 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-unused-vars": "warn",
         "max-len": [
             "error",
             {
-                "code": 80,
+                "code": 90,
                 "ignoreComments": true,
                 "ignoreStrings": true
             }

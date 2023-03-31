@@ -20,6 +20,8 @@
     "@jest/globals": "^29.5.0",
     "@types/crypto-js": "^4.1.1",
     "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.3",
+    "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "eslint": "^8.36.0",
@@ -33,7 +35,7 @@
     "url": "https://github.com/alyona-korenkovich/chain-net"
   },
   "scripts": {
-    "start": "npx ts-node -T src/main.ts",
+    "start": "node --loader ts-node/esm --es-module-specifier-resolution=node src/main.ts ",
     "eslint": "eslint src/** tests/**",
     "eslint:fix": "eslint src/** tests/** --fix",
     "test": "jest",
@@ -67,7 +69,8 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "crypto-random-string": "^5.0.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "ws": "^8.13.0"
   },
   "globals": {
     "ts-jest": {
