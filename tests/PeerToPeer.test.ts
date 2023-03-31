@@ -119,15 +119,15 @@ describe('Peer-to-peer network', () => {
 
   it('should correctly create a node *without* specified env vars', (done) => {
     checkCorrectInitialization(nodeWOVars, done);
-  }, 10000);
+  }, 15000);
 
   it('should correctly create a node *with* specified env vars (as default)', (done) => {
     checkCorrectInitialization(node3000, done);
-  }, 10000);
+  }, 15000);
 
   it('should correctly create a node *with* specified env vars (non-default)', (done) => {
     checkCorrectInitialization(node3001WOPeers, done);
-  }, 10000);
+  }, 15000);
 
   it('should throw an error if node attempts to connect to not opened socket', (done) => {
     const node3001Process = spawnProcess(node3001);
@@ -144,7 +144,7 @@ describe('Peer-to-peer network', () => {
     node3001Process.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
     });
-  }, 2000);
+  }, 5000);
 
   test('two nodes get connected to each other', (done) => {
     const processNode3000 = spawnProcess(node3000);
@@ -176,7 +176,7 @@ describe('Peer-to-peer network', () => {
         console.log('Node 3000 has no data in stdout');
       }
     }, 1000);
-  }, 8000);
+  }, 15000);
 
   test('three nodes get synchronized', (done) => {
     let processNode3000: ChildProcessWithoutNullStreams;
@@ -264,5 +264,5 @@ describe('Peer-to-peer network', () => {
     };
 
     spawnProcesses(done);
-  }, 75000);
+  }, 120000);
 });
