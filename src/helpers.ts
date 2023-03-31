@@ -8,7 +8,7 @@ export const randomString = () => {
   }));
 };
 
-export const message = ({
+export const makeMessage = ({
   type,
   data,
 }: TMessage) => {
