@@ -391,6 +391,6 @@ setInterval(() => {
       PORT: ${PORT}
       CHAIN: ${JSON.stringify(Chain.chain)}
   `);
-}, 3000);
+}, 5000);
 
 PEERS.forEach((peer) => connect(peer));
