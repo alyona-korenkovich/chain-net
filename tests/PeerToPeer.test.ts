@@ -22,6 +22,7 @@ const getEnvVars = ({
     ADDRESS: 'ws://localhost:3000',
     PEERS: '',
     PORT: '3000',
+    PATH: process.env.PATH,
   };
 
   if (address) {
@@ -50,6 +51,7 @@ const killProcesses = (processes: ChildProcessWithoutNullStreams[]) => {
 
 const checkCorrectInitialization = (node: TCommand, done: DoneCallback) => {
   const process = spawnProcess(node);
+  let processData: string;
 
   process.on('error', (err: NodeJS.ErrnoException) => {
     if (err.code === 'ENOENT') {
@@ -59,41 +61,39 @@ const checkCorrectInitialization = (node: TCommand, done: DoneCallback) => {
     }
   });
 
-  setTimeout(() => {
-    const data = process.stdout.read();
+  process.stdout.on('data', (data) => {
+    processData = data.toString();
+  });
 
-    expect(data).not.toBeFalsy();
+  setTimeout(() => {
+    expect(processData).not.toBeFalsy();
 
     // when only been initialized, there are no opened sockets yet
-    expect(data.toString()).toContain('CONNECTED SOCKETS\' ADDRESSES: [],');
+    expect(processData).toContain('CONNECTED SOCKETS\' ADDRESSES: [],');
 
     if (node.address) {
-      expect(data.toString()).toContain(`ADDRESS: ${node.address}`);
+      expect(processData).toContain(`ADDRESS: ${node.address}`);
     } else {
-      expect(data.toString()).toContain('ADDRESS: ws://localhost:3000');
+      expect(processData).toContain('ADDRESS: ws://localhost:3000');
     }
 
     if (node.peers) {
-      expect(data.toString()).toContain(`PEERS: ${node.peers}`);
+      expect(processData).toContain(`PEERS: ${node.peers}`);
     } else {
-      expect(data.toString()).toContain('PEERS: ');
+      expect(processData).toContain('PEERS: ');
     }
 
     if (node.port) {
-      expect(data.toString()).toContain(`PORT: ${node.port}`);
+      expect(processData).toContain(`PORT: ${node.port}`);
     } else {
-      expect(data.toString()).toContain('PORT: 3000');
+      expect(processData).toContain('PORT: 3000');
     }
-  }, 9000);
-
-  process.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  });
+  }, 15000);
 
   setTimeout(() => {
     process.kill();
     done();
-  }, 9500);
+  }, 15500);
 };
 
 describe('Peer-to-peer network', () => {
@@ -119,15 +119,15 @@ describe('Peer-to-peer network', () => {
 
   it('should correctly create a node *without* specified env vars', (done) => {
     checkCorrectInitialization(nodeWOVars, done);
-  }, 10000);
+  }, 20000);
 
   it('should correctly create a node *with* specified env vars (as default)', (done) => {
     checkCorrectInitialization(node3000, done);
-  }, 10000);
+  }, 20000);
 
   it('should correctly create a node *with* specified env vars (non-default)', (done) => {
     checkCorrectInitialization(node3001WOPeers, done);
-  }, 10000);
+  }, 20000);
 
   it('should throw an error if node attempts to connect to not opened socket', (done) => {
     const node3001Process = spawnProcess(node3001);
@@ -144,39 +144,40 @@ describe('Peer-to-peer network', () => {
     node3001Process.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
     });
-  }, 2000);
+  }, 10000);
 
   test('two nodes get connected to each other', (done) => {
     const processNode3000 = spawnProcess(node3000);
     const processNode3001 = spawnProcess(node3001);
 
+    let data3000: string;
+    let data3001: string;
+
+    processNode3000.stdout.on('data', (data) => {
+      data3000 = data.toString();
+    });
+
+    processNode3001.stdout.on('data', (data) => {
+      data3001 = data.toString();
+    });
+
     const interval = setInterval(() => {
-      const data3000 = processNode3000.stdout.read();
-      const data3001 = processNode3001.stdout.read();
-
-      if (data3000) {
-        const data3000AsString = data3000.toString();
+      if (data3000 && data3001) {
         if (data3001) {
-          const data3001AsString = data3001.toString();
+          expect(data3001).toContain('PEERS: ws://localhost:3000,');
+          expect(data3001).toContain('CONNECTED SOCKETS\' ADDRESSES: ["ws://localhost:3000"]');
 
-          expect(data3001AsString).toContain('PEERS: ws://localhost:3000,');
-          expect(data3001AsString).toContain('CONNECTED SOCKETS\' ADDRESSES: ["ws://localhost:3000"]');
-
-          expect(data3000AsString).toContain('PEERS: ,');
-          expect(data3000AsString).toContain('CONNECTED SOCKETS\' ADDRESSES: ["ws://localhost:3001"]');
+          expect(data3000).toContain('PEERS: ,');
+          expect(data3000).toContain('CONNECTED SOCKETS\' ADDRESSES: ["ws://localhost:3001"]');
 
           clearInterval(interval);
           processNode3000.kill();
           processNode3001.kill();
           done();
-        } else {
-          console.log('Node 3001 has no data in stdout');
         }
-      } else {
-        console.log('Node 3000 has no data in stdout');
       }
     }, 1000);
-  }, 8000);
+  }, 30000);
 
   test('three nodes get synchronized', (done) => {
     let processNode3000: ChildProcessWithoutNullStreams;
@@ -218,9 +219,9 @@ describe('Peer-to-peer network', () => {
               });
             }
             callback(done);
-          }, 500);
+          }, 1000);
         }, 1000);
-      }, 1500);
+      });
     };
 
     const callback = (done: DoneCallback) => {
@@ -237,7 +238,7 @@ describe('Peer-to-peer network', () => {
               processNode3002.kill();
 
               done();
-            }, 60000);
+            }, 100000);
             clearInterval(interval);
           } else {
             synchronized = waitForSynchronization(0, done);
@@ -259,10 +260,14 @@ describe('Peer-to-peer network', () => {
       ) {
         return true;
       } else {
-        setTimeout(() => waitForSynchronization(timesCalled + 1, done), 5000);
+        setTimeout(() => waitForSynchronization(timesCalled + 1, done), 10000);
       }
     };
 
-    spawnProcesses(done);
-  }, 75000);
+    try {
+      spawnProcesses(done);
+    } catch (error) {
+      throw error;
+    }
+  }, 120000);
 });

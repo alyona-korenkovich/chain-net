@@ -38,7 +38,7 @@
     "start": "node --loader ts-node/esm --es-module-specifier-resolution=node src/main.ts ",
     "eslint": "eslint src/** tests/**",
     "eslint:fix": "eslint src/** tests/** --fix",
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
     "jest:clearCache": "jest --clearCache",
     "coverage": "jest --collect-coverage"
   },
