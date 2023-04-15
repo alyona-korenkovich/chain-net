@@ -28,3 +28,21 @@ On the image below one can see what it looks like when containers are running in
 ![img.png](img.png)
 
 As we can see on the screen, all three nodes are connected to one another and have synchronized chains.
+
+---
+
+<h2>Testing</h2>
+The application has been tested. 
+The repository contains the following types of tests:
+* Unit tests 
+* Integration tests
+* E2E tests
+
+<h3>Test coverage:</h3>
+
+| File          | % Stmts | % Branch | % Funcs | % Lines |                               
+|---------------|---------|----------|---------|---------|
+| All files     | 72.12   | 61.92    | 72.27   | 62.97   | 
+| Block.ts      | 100     | 100      | 100     | 100     |                                                   
+| Blockchain.ts | 100     | 100      | 100     | 100     |                   
+| const.ts      | 100     | 100      | 100     | 100     |
