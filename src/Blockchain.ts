@@ -13,8 +13,8 @@ class Blockchain {
    * @param {number} difficulty - how many 0s has to be in the end of a hash
    */
   constructor(difficulty: number) {
-    this.chain = [this.createGenesisBlock()];
     this.difficulty = difficulty;
+    this.chain = [this.createGenesisBlock()];
   }
 
   /**
@@ -22,11 +22,14 @@ class Blockchain {
    * @return {Block} block
    */
   createGenesisBlock = () => {
-    return new Block({
+    const genesis = new Block({
       index: 0,
       data: randomString(),
       previousHash: '0',
     });
+    genesis.mineBlock(this.difficulty);
+
+    return genesis;
   };
 
   /**
